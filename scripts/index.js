@@ -55,6 +55,8 @@ operationButtons.forEach((operationButton) => {
 clearButton.addEventListener('click',() => {
     currentInput.textContent = '';
     previousInput.textContent = '';
+    current = null;
+    previous = null;
 })
 
 
