@@ -16,25 +16,36 @@ numButtons.forEach((button) =>{
 operationButtons.forEach((operationButton) => {
     operationButton.addEventListener('click', () => {
         current = parseInt(currentInput.textContent);
-        console.log(operationButton.textContent)
-        previousInput.textContent = currentInput.textContent + ' ' +  operationButton.textContent;
-        currentInput.textContent = ' ';
+        console.log(operationButton.textContent);
+        if(!previous){
+            previous = current;
+            previousInput.textContent = currentInput.textContent +  operationButton.textContent;
+            currentInput.textContent = ' ';
+            return;
+        }
             switch (operationButton.value){
                 case '+':   
                     previousInput.textContent = add(previous, current);
+                    
                     break;
                 case '-':   
                     previousInput.textContent = subtract(previous, current);
+
                     break;
                 case '/':   
-                    previousInput.textContent = multiply(previous, current);
+                    
+                    previousInput.textContent = divide(previous, current);
+
                     break;
                 case '*':   
-                    previousInput.textContent = divide(previous, current);
+                    previousInput.textContent = multiply(previous, current);
+
                     break;
                 case '=': 
                     console.log('= was clicked');
             }
+                previous = parseInt(previousInput.textContent);
+                currentInput.textContent = ' ';
         
     })
 })
@@ -50,17 +61,20 @@ clearButton.addEventListener('click',() => {
 
 
 function add(input1, input2){
-    console.log(`current:${input1}, previous:${input2}`);
+    console.log(`current:${input2}, previous:${input1}`);
     console.log(input1 + input2);   
     return input1 + input2;
 }
 function subtract(input1, input2){
+    console.log(`current:${input2}, previous:${input1}`);
     return input1 - input2;
 }
 function multiply(input1, input2){
+    console.log(`current:${input2}, previous:${input1}`);
     return input1 * input2;
 }
 function divide(input1, input2){
+    console.log(`current:${input2}, previous:${input1}`);
     return input1/input2;
 }
 
