@@ -5,6 +5,7 @@ const previousInput = document.querySelector('#previousInput');
 const clearButton = document.querySelector('#clear');
 let current = null;
 let previous = null;
+let result = null;
 console.log(!current);
 numButtons.forEach((button) =>{
     button.addEventListener('click', () => {
@@ -17,35 +18,35 @@ operationButtons.forEach((operationButton) => {
     operationButton.addEventListener('click', () => {
         current = parseInt(currentInput.textContent);
         console.log(operationButton.textContent);
+
         if(!previous){
             previous = current;
             previousInput.textContent = currentInput.textContent +  operationButton.textContent;
             currentInput.textContent = ' ';
             return;
         }
-            switch (operationButton.value){
-                case '+':   
-                    previousInput.textContent = add(previous, current);
-                    
-                    break;
-                case '-':   
-                    previousInput.textContent = subtract(previous, current);
+        switch (operationButton.value){
+            case '+':   
+                result = add(previous, current);                   
+                break;
+            case '-':   
+                result = subtract(previous, current);
+                break;
+            case '/':                  
+                result = divide(previous, current);
+                break;
+            case '*':   
+                result = multiply(previous, current);
+                break;
+            case '=': 
+            console.log(!result);
+                if(!result){
+                    return;
+                }
+        }
 
-                    break;
-                case '/':   
-                    
-                    previousInput.textContent = divide(previous, current);
-
-                    break;
-                case '*':   
-                    previousInput.textContent = multiply(previous, current);
-
-                    break;
-                case '=': 
-                    console.log('= was clicked');
-            }
-                previous = parseInt(previousInput.textContent);
-                currentInput.textContent = ' ';
+        previousInput.textContent = `${previous} ${operationButton.value} ${current}` 
+        currentInput.textContent = result;
         
     })
 })
