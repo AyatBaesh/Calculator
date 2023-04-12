@@ -7,41 +7,46 @@ const keyboard = document.querySelector('.keyboard');
 let current = null;
 let previous = null;
 let result = null;
+let prevResult = null;
 let operation = '';
+let displayResult = null;
 
 keyboard.addEventListener('click', (event) => {
     if(event.target.classList.contains('btn')){
-        if(parseInt(currentInput.textContent) === result){
+        if(parseInt(currentInput.textContent) === displayResult){//check if there's a result of prev operation and save this result into the previousInput
             previousInput.textContent = currentInput.textContent + operation;
             currentInput.textContent = '';
             currentInput.textContent += event.target.value;
         }else{
+            console.log('first input')
             currentInput.textContent += event.target.value;
         }
     }else if(event.target.classList.contains('control')){
-        
         current = parseInt(currentInput.textContent);
-        if(!previous){
+        if(!previous){  //check if there's a "previous" and assign one if there wasn't + updates display and returns to waiting on the second numnerical input from the user
+            console.log(`!previous: ${!previous}`)
             previous = current;
-            previousInput.textContent = currentInput.textContent +  event.target.textContent;
+            previousInput.textContent = currentInput.textContent + event.target.textContent;
             currentInput.textContent = '';
             return;
         }
 
-        if(!operation){
+        if(!operation){//checks if operation input is first or not
             operation = event.target.value;
             result = getResult(operation);
-            console.log(`result: ${result}`)
+            displayResult = result;
+            console.log(`result: ${result}`);
 
             
         }else{
             previous = result;
             previousInput.textContent = result;
             let newOperation = event.target.value;
-            previous = result;
+            result = getResult(newOperation);
         }
-        previousInput.textContent = `${previous} ${event.target.value} ${current} = ` 
-        currentInput.textContent = `${result}`;
+        previousInput.textContent = `${previous} ${event.target.value} ${current} = ${result}` 
+        currentInput.textContent = `${displayResult}`;
+        
         
     }else if(event.target.textContent === "CLEAR"){
         currentInput.textContent = '';
@@ -49,6 +54,10 @@ keyboard.addEventListener('click', (event) => {
         previousInput.textContent = '';
         current = null;
         previous = null;
+        result = null;
+        displayResult = null;
+        prevResult = null;
+        operation = '';
     }
 })
 
@@ -132,7 +141,14 @@ function divide(input1, input2){
 
 
 
-
+// if(parseInt(currentInput.textContent) === result){//check if there's a result of prev operation and save this result into the previousInput
+//     previousInput.textContent = currentInput.textContent + operation;
+//     currentInput.textContent = '';
+//     currentInput.textContent += event.target.value;
+// }else{
+//     console.log('first input')
+//     currentInput.textContent += event.target.value;
+// }
 
 
 
