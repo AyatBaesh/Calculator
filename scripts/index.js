@@ -1,7 +1,7 @@
-const numButtons = document.querySelectorAll('.btn');
-const operationButtons = document.querySelectorAll('.control');
-const currentInput = document.querySelector('#currentInput');
-const previousInput = document.querySelector('#previousInput');
+const numButtons = document.querySelectorAll('.num');
+const operationButtons = document.querySelectorAll('.operation');
+const currentDisplay = document.querySelector('#currentInput');
+const previousDisplay = document.querySelector('#previousInput');
 const clearButton = document.querySelector('#clear');
 const keyboard = document.querySelector('.keyboard');
 let current = null;
@@ -9,55 +9,60 @@ let previous = null;
 let result = null;
 let prevResult = null;
 let operation = '';
-let displayResult = null;
 
 keyboard.addEventListener('click', (event) => {
-    if(event.target.classList.contains('btn')){
-        if(parseInt(currentInput.textContent) === displayResult){//check if there's a result of prev operation and save this result into the previousInput
-            previousInput.textContent = currentInput.textContent + operation;
-            currentInput.textContent = '';
-            currentInput.textContent += event.target.value;
-        }else{
-            console.log('first input')
-            currentInput.textContent += event.target.value;
-        }
-    }else if(event.target.classList.contains('control')){
-        current = parseInt(currentInput.textContent);
-        if(!previous){  //check if there's a "previous" and assign one if there wasn't + updates display and returns to waiting on the second numnerical input from the user
-            console.log(`!previous: ${!previous}`)
+    if(event.target.classList.contains('num')){ //if number clicked
+        currentDisplay.textContent += event.target.value;
+    
+    }else if(event.target.classList.contains('operation')){//if operation clicked
+        //UPDATING previous & current
+        if(current != null){
             previous = current;
-            previousInput.textContent = currentInput.textContent + event.target.textContent;
-            currentInput.textContent = '';
+            current = parseInt(currentDisplay.textContent);
+        }else{
+            current = parseInt(currentDisplay.textContent);
+        }
+        //OPERATION '=' CASE
+        if(operation === '' && event.target.value === '='){
+            return;
+        }else if(operation != '' && event.target.value === '='){
+            prevResult = getResult(operation);
+            previousDisplay.textContent = `${previous} ${operation} ${current} = ${prevResult}`;
+            currentDisplay.textContent = ``;
+            previous = prevResult;
+            current = null;
+            operation = '';
             return;
         }
-
-        if(!operation){//checks if operation input is first or not
-            operation = event.target.value;
-            result = getResult(operation);
-            displayResult = result;
-            console.log(`result: ${result}`);
-
-            
-        }else{
-            previous = result;
-            previousInput.textContent = result;
-            let newOperation = event.target.value;
-            result = getResult(newOperation);
+        //DEFAULT FUNCTIONALITY
+        if(operation != ''){
+            prevResult = getResult(operation);
+            previousDisplay.textContent = `${prevResult}`;
+            previous = prevResult;
+            current = null;
+            currentDisplay.textContent = '';
         }
-        previousInput.textContent = `${previous} ${event.target.value} ${current} = ${result}` 
-        currentInput.textContent = `${displayResult}`;
+
+        operation = event.target.value;
+
+        if(current != null){
+        result = getResult(operation);
+        previousDisplay.textContent = currentDisplay.textContent;
+        currentDisplay.textContent = '';
+        }
+
+        previousDisplay.textContent += operation;
         
-        
-    }else if(event.target.textContent === "CLEAR"){
-        currentInput.textContent = '';
-        
-        previousInput.textContent = '';
-        current = null;
-        previous = null;
-        result = null;
-        displayResult = null;
-        prevResult = null;
-        operation = '';
+
+    
+    }else if(event.target.value === 'clear'){
+         current = null;
+         previous = null;
+         result = null;
+         prevResult = null;
+         operation = '';
+        currentDisplay.textContent = '';
+        previousDisplay.textContent = '';
     }
 })
 
@@ -77,10 +82,7 @@ function getResult(operation){
             result = multiply(previous, current);
             break;
         case '=': 
-        console.log(!result);
-            if(!result){
-                return result;
-            }
+        return result;
     }
     return result;
 }
@@ -101,88 +103,4 @@ function divide(input1, input2){
     console.log(`current:${input2}, previous:${input1}`);
     return input1/input2;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// if(parseInt(currentInput.textContent) === result){//check if there's a result of prev operation and save this result into the previousInput
-//     previousInput.textContent = currentInput.textContent + operation;
-//     currentInput.textContent = '';
-//     currentInput.textContent += event.target.value;
-// }else{
-//     console.log('first input')
-//     currentInput.textContent += event.target.value;
-// }
-
-
-
-
-
-
-
-
-
-
-// numButtons.forEach((button) => {
-//     button.addEventListener('click', (e) => {
-//         previousInput.textContent += button.value;
-//         // let current = parseInt(previousInput.textContent);
-//     });
-
-// });
-// operationButtons.forEach((button) => {
-//     button.addEventListener('click', () => {
-//         console.log(previousInput.textContent)
-//         let current = parseInt(previousInput.textContent);
-//         previousInput.textContent = previousInput.textContent + button.value;
-//         previousInput.textContent = '';
-//         operationButtons.forEach((operationButton) => {
-//             let current = parseInt(previousInput.textContent);
-//             operationButton.addEventListener('click', () => {
-
-//             })
-//         })
-
-//     });
-// });
-
-
-// // console.log(`${input}`)
-
 
