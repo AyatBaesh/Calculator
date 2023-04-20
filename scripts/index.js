@@ -4,6 +4,7 @@ const currentDisplay = document.querySelector('#currentInput');
 const previousDisplay = document.querySelector('#previousInput');
 const clearButton = document.querySelector('#clear');
 const keyboard = document.querySelector('.keyboard');
+// const equalButton = document.querySelector('.equal');
 let current = null;
 let previous = null;
 let result = null;
@@ -11,29 +12,17 @@ let prevResult = null;
 let operation = '';
 
 keyboard.addEventListener('click', (event) => {
-    if(event.target.classList.contains('num')){ //if number clicked
+    if(event.target.classList.contains('num')){ //if number clicked => update currentDisplay
         currentDisplay.textContent += event.target.value;
     
     }else if(event.target.classList.contains('operation')){//if operation clicked
         //UPDATING previous & current
         if(current != null){
             previous = current;
-            current = parseInt(currentDisplay.textContent);
-        }else{
-            current = parseInt(currentDisplay.textContent);
         }
-        //OPERATION '=' CASE
-        if(operation === '' && event.target.value === '='){
-            return;
-        }else if(operation != '' && event.target.value === '='){
-            prevResult = getResult(operation);
-            previousDisplay.textContent = `${previous} ${operation} ${current} = ${prevResult}`;
-            currentDisplay.textContent = ``;
-            previous = prevResult;
-            current = null;
-            operation = '';
-            return;
-        }
+        current = parseInt(currentDisplay.textContent);
+        
+        
         //DEFAULT FUNCTIONALITY
         if(operation != ''){
             prevResult = getResult(operation);
@@ -46,25 +35,29 @@ keyboard.addEventListener('click', (event) => {
         operation = event.target.value;
 
         if(current != null){
-        result = getResult(operation);
-        previousDisplay.textContent = currentDisplay.textContent;
-        currentDisplay.textContent = '';
+            result = getResult(operation);
+            previousDisplay.textContent = currentDisplay.textContent;
+            currentDisplay.textContent = '';
+        }
+        if(operation != '='){
+        previousDisplay.textContent += operation;
+        }else{
+            previousDisplay.textContent = operation + previousDisplay.textContent;
         }
 
-        previousDisplay.textContent += operation;
-        
-
     
-    }else if(event.target.value === 'clear'){
-         current = null;
-         previous = null;
-         result = null;
-         prevResult = null;
-         operation = '';
+    }else if(event.target.value === 'clear'){//if 'clear' clicked
+        current = null;
+        previous = null;
+        result = null;
+        prevResult = null;
+        operation = '';
         currentDisplay.textContent = '';
         previousDisplay.textContent = '';
+    }else if(event.target.value === 'delete'){
+        currentDisplay.textContent = '';
     }
-})
+});
 
 
 function getResult(operation){
@@ -82,6 +75,9 @@ function getResult(operation){
             result = multiply(previous, current);
             break;
         case '=': 
+        if(!result){
+            return;
+        }
         return result;
     }
     return result;
