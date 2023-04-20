@@ -1,51 +1,41 @@
-const numButtons = document.querySelectorAll('.num');
-const operationButtons = document.querySelectorAll('.operation');
+import { add, subtract, multiply, divide } from './functions.js';
 const currentDisplay = document.querySelector('#currentInput');
 const previousDisplay = document.querySelector('#previousInput');
 const clearButton = document.querySelector('#clear');
 const keyboard = document.querySelector('.keyboard');
-// const equalButton = document.querySelector('.equal');
 let current = null;
 let previous = null;
 let result = null;
 let prevResult = null;
-let operation = '';
+let operation = '';6
 
 keyboard.addEventListener('click', (event) => {
-    if(event.target.classList.contains('num')){ //if number clicked => update currentDisplay
+    if(event.target.classList.contains('num')){
         currentDisplay.textContent += event.target.value;
     
-    }else if(event.target.classList.contains('operation')){//if operation clicked
-        //UPDATING previous & current
-        if(current != null){
+    }else if(event.target.classList.contains('operation')){
+        if(current){
             previous = current;
         }
         current = parseInt(currentDisplay.textContent);
-        
-        
-        //DEFAULT FUNCTIONALITY
-        if(operation != ''){
+        if(operation){
             prevResult = getResult(operation);
             previousDisplay.textContent = `${prevResult}`;
             previous = prevResult;
             current = null;
             currentDisplay.textContent = '';
         }
-
         operation = event.target.value;
-
-        if(current != null){
+        if(current){
             result = getResult(operation);
             previousDisplay.textContent = currentDisplay.textContent;
             currentDisplay.textContent = '';
         }
         if(operation != '='){
-        previousDisplay.textContent += operation;
+            previousDisplay.textContent += operation;
         }else{
             previousDisplay.textContent = operation + previousDisplay.textContent;
         }
-
-    
     }else if(event.target.value === 'clear'){//if 'clear' clicked
         current = null;
         previous = null;
@@ -61,6 +51,10 @@ keyboard.addEventListener('click', (event) => {
 
 
 function getResult(operation){
+    // console.log(`getResult called: current:${current}, previous:${previous}`);
+    if(!previous || !current && previous != 0 && current != 0){
+        return previous;
+    }
     switch (operation){
         case '+':   
             result = add(previous, current);                   
@@ -68,7 +62,7 @@ function getResult(operation){
         case '-':   
             result = subtract(previous, current);
             break;
-        case '/':                  
+        case '/':             
             result = divide(previous, current);
             break;
         case '*':   
@@ -82,21 +76,3 @@ function getResult(operation){
     }
     return result;
 }
-
-function add(input1, input2){
-    console.log(`current:${input2}, previous:${input1}`);   
-    return input1 + input2;
-}
-function subtract(input1, input2){
-    console.log(`current:${input2}, previous:${input1}`);
-    return input1 - input2;
-}
-function multiply(input1, input2){
-    console.log(`current:${input2}, previous:${input1}`);
-    return input1 * input2;
-}
-function divide(input1, input2){
-    console.log(`current:${input2}, previous:${input1}`);
-    return input1/input2;
-}
-
