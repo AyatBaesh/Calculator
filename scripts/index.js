@@ -20,13 +20,13 @@ keyboard.addEventListener('click', (event) => {
     if(event.target.value === '.'){
         currentDisplay.textContent += event.target.value;
         floatButton.disabled = true;
-    }
-    if(event.target.classList.contains('num')){
+
+    }else if(event.target.classList.contains('num')){
         if(currentDisplay.textContent.includes('.')){
             floatButton.disabled = true;
         }
         currentDisplay.textContent += event.target.value;
-    
+        
     }else if(event.target.classList.contains('operation')){
         floatButton.disabled = false;
         if(current != null){

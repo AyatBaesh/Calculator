@@ -19,7 +19,8 @@ function divide(input1, input2){
     return input1/input2;
 }
 function getResult(operation, current, previous, result){
-    if(!previous || !current && previous != 0 && current != 0){
+    if((!previous || !current) && (previous != 0) && (current != 0)){
+        console.log(`current:${current}, previous:${previous}`);
         return previous;
     }
     switch (operation){
