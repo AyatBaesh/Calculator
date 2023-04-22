@@ -1,25 +1,40 @@
-import { add, subtract, multiply, divide } from './functions.js';
+import {getResult } from './functions.js';
 const currentDisplay = document.querySelector('#currentInput');
 const previousDisplay = document.querySelector('#previousInput');
-const clearButton = document.querySelector('#clear');
 const keyboard = document.querySelector('.keyboard');
+const floatButton = document.getElementById('.');
 let current = null;
 let previous = null;
 let result = null;
 let prevResult = null;
-let operation = '';6
+let operation = '';
 
+document.addEventListener('keydown', (event) => {
+    const key = event.key;
+    const button = document.querySelector(`button[value='${key}']`);
+    if (button) {
+      button.click();
+    }
+  });
 keyboard.addEventListener('click', (event) => {
+    if(event.target.value === '.'){
+        currentDisplay.textContent += event.target.value;
+    floatButton.disabled = true;
+    }
     if(event.target.classList.contains('num')){
+        if(currentDisplay.textContent.includes('.')){
+            floatButton.disabled = true;
+        }
         currentDisplay.textContent += event.target.value;
     
     }else if(event.target.classList.contains('operation')){
+        floatButton.disabled = false;
         if(current){
             previous = current;
         }
-        current = parseInt(currentDisplay.textContent);
+        current = parseFloat(currentDisplay.textContent);
         if(operation){
-            prevResult = getResult(operation);
+            prevResult = getResult(operation, current, previous, result);
             previousDisplay.textContent = `${prevResult}`;
             previous = prevResult;
             current = null;
@@ -27,7 +42,7 @@ keyboard.addEventListener('click', (event) => {
         }
         operation = event.target.value;
         if(current){
-            result = getResult(operation);
+            result = getResult(operation, current, previous, result);
             previousDisplay.textContent = currentDisplay.textContent;
             currentDisplay.textContent = '';
         }
@@ -44,35 +59,17 @@ keyboard.addEventListener('click', (event) => {
         operation = '';
         currentDisplay.textContent = '';
         previousDisplay.textContent = '';
+        floatButton.disabled = false;
     }else if(event.target.value === 'delete'){
-        currentDisplay.textContent = '';
+        currentDisplay.textContent = currentDisplay.textContent.slice(0, -1);
+        if(!currentDisplay.textContent.includes('.')){
+            floatButton.disabled = false;
+        }
+        
     }
 });
 
 
-function getResult(operation){
-    // console.log(`getResult called: current:${current}, previous:${previous}`);
-    if(!previous || !current && previous != 0 && current != 0){
-        return previous;
-    }
-    switch (operation){
-        case '+':   
-            result = add(previous, current);                   
-            break;
-        case '-':   
-            result = subtract(previous, current);
-            break;
-        case '/':             
-            result = divide(previous, current);
-            break;
-        case '*':   
-            result = multiply(previous, current);
-            break;
-        case '=': 
-        if(!result){
-            return;
-        }
-        return result;
-    }
-    return result;
-}
+
+
+
