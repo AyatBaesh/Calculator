@@ -95,6 +95,3 @@ keyboard.addEventListener('click', (event) => {
 });
 
 
-
-
-
