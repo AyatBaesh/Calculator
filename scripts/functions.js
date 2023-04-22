@@ -24,8 +24,7 @@ function getResult(operation, current, previous, result){
         return previous;
     }
     switch (operation){
-        default:
-            throw new Error('That should never happened, seems like default case of switch is triggered');
+        
         case '+':   
             result = add(previous, current);                   
             break;
@@ -42,7 +41,11 @@ function getResult(operation, current, previous, result){
         if(!result){
             return;
         }
-        return result;
+            return result;
+        default:
+            throw new Error('That should never happened, seems like default case of switch is triggered');
+
+        
     }
     return result;
 }
