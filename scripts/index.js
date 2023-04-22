@@ -19,7 +19,7 @@ document.addEventListener('keydown', (event) => {
 keyboard.addEventListener('click', (event) => {
     if(event.target.value === '.'){
         currentDisplay.textContent += event.target.value;
-    floatButton.disabled = true;
+        floatButton.disabled = true;
     }
     if(event.target.classList.contains('num')){
         if(currentDisplay.textContent.includes('.')){
@@ -29,7 +29,7 @@ keyboard.addEventListener('click', (event) => {
     
     }else if(event.target.classList.contains('operation')){
         floatButton.disabled = false;
-        if(current){
+        if(current != null){
             previous = current;
         }
         current = parseFloat(currentDisplay.textContent);
@@ -41,7 +41,7 @@ keyboard.addEventListener('click', (event) => {
             currentDisplay.textContent = '';
         }
         operation = event.target.value;
-        if(current){
+        if(current != null){
             result = getResult(operation, current, previous, result);
             previousDisplay.textContent = currentDisplay.textContent;
             currentDisplay.textContent = '';
