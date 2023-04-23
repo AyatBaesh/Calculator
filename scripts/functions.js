@@ -18,11 +18,13 @@ function divide(input1, input2){
     }    
     return input1/input2;
 }
-function getResult(operation, current, previous, result){
+function getResult(operation, current, previous){
+    let result = null;
     if((!previous || !current) && (previous != 0) && (current != 0)){
         console.log(`current:${current}, previous:${previous}`);
         return previous;
     }
+    console.log(`oepration: ${operation}`)
     switch (operation){
         
         case '+':   
@@ -39,14 +41,17 @@ function getResult(operation, current, previous, result){
             break;
         case '=': 
         if(!result){
+            console.log(`result doesn't exist operation is '='`);
             return;
         }
+
             return result;
         default:
             throw new Error('That should never happened, seems like default case of switch is triggered');
 
         
     }
+    console.log(`result: ${result}`)
     return result;
 }
 export {getResult};
