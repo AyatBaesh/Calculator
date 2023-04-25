@@ -29,6 +29,7 @@ keyboard.addEventListener('click',(event) => {
         currentInput.textContent += event.target.value;
         currNumber = parseFloat(currentInput.textContent);
     }else if(event.target.classList.contains('operation')){
+        floatButton.disabled = false;
         if(!operation){
             operation = event.target.value;
         }else{
@@ -56,9 +57,13 @@ keyboard.addEventListener('click',(event) => {
         operation = '';
         currentInput.textContent = '';
         previousInput.textContent = '';
+        floatButton.disabled = false;
 
     }else if(event.target.classList.contains('delete-button')){
         currentInput.textContent = currentInput.textContent.slice(0, -1);
+        if(!currentDisplay.textContent.includes('.')){
+            floatButton.disabled = false;
+        }
     }
 })
   
