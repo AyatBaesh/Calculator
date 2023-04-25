@@ -5,9 +5,8 @@ const keyboard = document.querySelector('.keyboard');
 const floatButton = document.querySelector('.float');
 let prevNumber = null;
 let currNumber = null;
-let operation = '';
 let result = null;
-
+let operation = '';
 document.addEventListener('keydown', (event) => {
     let key = event.key;
     if(key === 'Enter'){
