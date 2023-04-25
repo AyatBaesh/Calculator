@@ -1,45 +1,68 @@
-import {getResult } from './functions.js';
+import {getResult } from './math.js';
 const currentInput = document.querySelector('#currentInput');
 const previousInput = document.querySelector('#previousInput');
-const keyboard = document.querySelectorAll('.keyboard');
-const numButtons = document.querySelectorAll('.num');
-const operationButtons = document.querySelectorAll('.operation');
-const equalButton = document.querySelector('.equal-button');
+const keyboard = document.querySelector('.keyboard');
+const floatButton = document.querySelector('.float');
 let prevNumber = null;
 let currNumber = null;
 let operation = '';
 let result = null;
 
-numButtons.forEach((button) => {
-    button.addEventListener('click', (event) => {
+document.addEventListener('keydown', (event) => {
+    let key = event.key;
+    if(key === 'Enter'){
+        key = '=';
+    }
+    const button = document.querySelector(`button[value='${key}']`);
+    if (button) {
+      button.click();
+    }
+});
+keyboard.addEventListener('click',(event) => {
+    if(event.target.value === '.'){ //hadling '.' button
+        currentInput.textContent += event.target.value;
+        floatButton.disabled = true;
+        if(currentInput.textContent === '.'){
+            currentInput.textContent = 0 + currentInput.textContent;
+        }
+    }else if(event.target.classList.contains('num')){
+        
         currentInput.textContent += event.target.value;
         currNumber = parseFloat(currentInput.textContent);
-    })
-});
-operationButtons.forEach((button) => {
-    button.addEventListener('click', (event) => {
+    }else if(event.target.classList.contains('operation')){
         if(!operation){
             operation = event.target.value;
         }else{
             result = getResult(operation, currNumber, prevNumber);
             prevNumber = result;
+            currNumber = null;
             operation = event.target.value;
         }
         if(!prevNumber){
             prevNumber = currNumber;
+            currNumber = null;
         }
         previousInput.textContent = prevNumber + operation;
         currentInput.textContent = '';
+    }else if(event.target.classList.contains('equal-button')){
+        result = getResult(operation, currNumber, prevNumber);
+        previousInput.textContent = result;
+        prevNumber = result;
+        currNumber = null;
+        currentInput.textContent = '';
+    }else if(event.target.classList.contains('clear-button')){
+        prevNumber = null;
+        currNumber = null;
+        result = null;
+        operation = '';
+        currentInput.textContent = '';
+        previousInput.textContent = '';
 
-    })
-});
-equalButton.addEventListener('click',(event) => {
-    result = getResult(operation, currNumber, prevNumber);
-    previousInput.textContent = result;
-    prevNumber = result;
-    currentInput.textContent = '';
+    }else if(event.target.classList.contains('delete-button')){
+        currentInput.textContent = currentInput.textContent.slice(0, -1);
+    }
 })
-
+  
 
 
 
@@ -142,8 +165,8 @@ equalButton.addEventListener('click',(event) => {
 
 
 // import {getResult } from './functions.js';
-// const currentDisplay = document.querySelector('#currentInput');
-// const previousDisplay = document.querySelector('#previousInput');
+// const currentInput = document.querySelector('#currentInput');
+// const previousIcurrentInput = document.querySelector('#previousInput');
 // const keyboard = document.querySelector('.keyboard');
 // const floatButton = document.getElementById('.');
 // let current = null;
@@ -171,14 +194,14 @@ equalButton.addEventListener('click',(event) => {
 //   //listen to type of the button clicked:
 // keyboard.addEventListener('click', (event) => {
 //     if(event.target.value === '.'){ //hadling '.' button
-//         currentDisplay.textContent += event.target.value;
+//         currentInput.textContent += event.target.value;
 //         floatButton.disabled = true;
-//         if(currentDisplay.textContent === '.'){
-//             currentDisplay.textContent = 0 + currentDisplay.textContent;
+//         if(currentInput.textContent === '.'){
+//             currentInput.textContent = 0 + currentInput.textContent;
 //         }
 
 //     }else if(event.target.classList.contains('num')){
-//         currentDisplay.textContent += event.target.value;
+//         currentInput.textContent += event.target.value;
         
 
 //     }else if(event.target.classList.contains('operation')){
@@ -192,7 +215,7 @@ equalButton.addEventListener('click',(event) => {
 //             lastOperation = operation;
 //             if((current && previous) && lastOperation != '='){
 //                 result = getResult(lastOperation, current, previous);
-//                 previousDisplay.textContent = result;
+//                 previousIcurrentInput.textContent = result;
 //             }else if((current && previous) && lastOperation === '='){
                 
 //             }
@@ -206,14 +229,14 @@ equalButton.addEventListener('click',(event) => {
 //         prevResult = null;
 //         operation = '';
 //         lastOperation = '';
-//         currentDisplay.textContent = '';
-//         previousDisplay.textContent = '';
+//         currentInput.textContent = '';
+//         previousIcurrentInput.textContent = '';
 //         floatButton.disabled = false;
 
 
 //     }else if(event.target.classList.contains('delete-button')){
-//         currentDisplay.textContent = currentDisplay.textContent.slice(0, -1);
-//         if(!currentDisplay.textContent.includes('.')){
+//         currentInput.textContent = currentInput.textContent.slice(0, -1);
+//         if(!currentInput.textContent.includes('.')){
 //             floatButton.disabled = false;
 //         }
         
@@ -223,14 +246,14 @@ equalButton.addEventListener('click',(event) => {
 
 
 // function addOperation(current, operation){
-//     previousDisplay.textContent = current + operation;
+//     previousIcurrentInput.textContent = current + operation;
 //     return operation;
 // }
 // function getCurrent(){
-//     return parseFloat(currentDisplay.textContent);
+//     return parseFloat(currentInput.textContent);
 // }
 // function getPrevious(){
-//     return parseFloat(previousDisplay.textContent);
+//     return parseFloat(previousIcurrentInput.textContent);
 // }
 // function clear(current, previous, result, prevResult, operation, lastOperation){
 //     current = null;
@@ -239,8 +262,8 @@ equalButton.addEventListener('click',(event) => {
 //     prevResult = null;
 //     operation = '';
 //     lastOperation = '';
-//     currentDisplay.textContent = '';
-//     previousDisplay.textContent = '';
+//     currentInput.textContent = '';
+//     previousIcurrentInput.textContent = '';
 //     floatButton.disabled = false;
 //     return current, previous, result, prevResult, operation, lastOperation;
 // }
